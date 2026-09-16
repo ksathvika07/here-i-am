@@ -127,8 +127,8 @@ export default function AuthPage() {
 
     const code = verificationCode.trim();
 
-    if (!/^\d{7}$/.test(code)) {
-      setError("Please enter the 7-digit verification code.");
+    if (!/^\d{8}$/.test(code)) {
+      setError("Please enter the 8-digit verification code.");
       return;
     }
 
@@ -216,7 +216,7 @@ export default function AuthPage() {
               style={{ color: "var(--dark)" }}
             >
               {showVerification
-                ? `Enter the 7-digit code sent to ${email}.`
+                ? `Enter the 8-digit code sent to ${email}.`
                 : isLogin
                   ? "Enter your details to return to your personal space."
                   : "Create an account and start building your personal space."}
@@ -475,14 +475,14 @@ export default function AuthPage() {
                   type="text"
                   inputMode="numeric"
                   autoComplete="one-time-code"
-                  maxLength={7}
+                  maxLength={8}
                   value={verificationCode}
                   onChange={(event) =>
                     setVerificationCode(
                       event.target.value.replace(/\D/g, "")
                     )
                   }
-                  placeholder="Enter 7-digit code"
+                  placeholder="Enter 8-digit code"
                   required
                   className="font-body w-full rounded-2xl border px-4 py-4 text-center text-lg tracking-[0.45em] outline-none"
                   style={{
