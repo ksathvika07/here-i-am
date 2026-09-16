@@ -178,6 +178,17 @@ export default function DashboardPage() {
             <span className="hidden font-body text-xs text-[#554653] md:block">
               {userName}
             </span>
+
+            {/* Logout */}
+
+            <form action="/auth/signout" method="POST">
+              <button
+                type="submit"
+                className="rounded-full bg-[#4a3542] px-5 py-3 font-body text-xs font-medium text-white shadow-[0_10px_25px_rgba(74,53,66,0.18)] transition hover:-translate-y-0.5 hover:bg-[#624957]"
+              >
+                Log Out
+              </button>
+            </form>
           </div>
         </header>
 
