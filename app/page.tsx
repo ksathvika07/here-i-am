@@ -1,3 +1,4 @@
+import Link from "next/link";
 import HeroScene from "./components/HeroScene";
 
 export default function Home() {
@@ -24,15 +25,16 @@ export default function Home() {
           and everything that makes you who you are.
         </p>
 
-        <button
-          className="font-body mt-8 rounded-full px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] transition-transform duration-300 hover:scale-105"
+        <Link
+          href="/auth"
+          className="font-body mt-8 inline-block rounded-full px-8 py-4 text-sm font-medium uppercase tracking-[0.2em] transition-transform duration-300 hover:scale-105"
           style={{
             backgroundColor: "var(--dark)",
             color: "var(--white)",
           }}
         >
           Enter Your Space
-        </button>
+        </Link>
 
       </div>
     </main>
