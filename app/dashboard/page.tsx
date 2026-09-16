@@ -49,6 +49,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [thoughtLoading, setThoughtLoading] = useState(true);
 
+  const [quoteTilt, setQuoteTilt] = useState({
+    x: 0,
+    y: 0,
+  });
+
   useEffect(() => {
     const loadDashboard = async () => {
       const supabase = createClient();
@@ -88,6 +93,30 @@ export default function DashboardPage() {
     loadDashboard();
   }, [router]);
 
+  const handleQuotePointerMove = (
+    event: React.PointerEvent<HTMLDivElement>
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const rotateY = ((x / rect.width) - 0.5) * 8;
+    const rotateX = ((y / rect.height) - 0.5) * -8;
+
+    setQuoteTilt({
+      x: rotateX,
+      y: rotateY,
+    });
+  };
+
+  const resetQuoteTilt = () => {
+    setQuoteTilt({
+      x: 0,
+      y: 0,
+    });
+  };
+
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#f7efef]">
@@ -121,7 +150,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1500px]">
-        {/* Top bar */}
+        {/* ================= TOP BAR ================= */}
 
         <header className="mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
           <div>
@@ -149,16 +178,27 @@ export default function DashboardPage() {
             <span className="hidden font-body text-xs text-[#554653] md:block">
               {userName}
             </span>
+
+            {/* TOP RIGHT LOGOUT — KEPT */}
+
+            <form action="/auth/signout" method="POST">
+              <button
+                type="submit"
+                className="rounded-full bg-[#4a3542] px-5 py-3 font-body text-xs font-medium text-white shadow-[0_10px_25px_rgba(74,53,66,0.18)] transition hover:-translate-y-0.5 hover:bg-[#624957]"
+              >
+                Log Out
+              </button>
+            </form>
           </div>
         </header>
 
-        {/* Main dashboard grid */}
+        {/* ================= MAIN GRID ================= */}
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
-          {/* Main column */}
+          {/* ================= MAIN COLUMN ================= */}
 
           <div className="min-w-0 space-y-5">
-            {/* Hero */}
+            {/* HERO */}
 
             <section className="dashboard-hero min-h-[500px] rounded-[34px] px-6 py-7 sm:px-10 sm:py-9">
               <div className="absolute right-[-60px] top-[-80px] h-72 w-72 rounded-full bg-[#efc8bd]/20 blur-3xl" />
@@ -166,7 +206,7 @@ export default function DashboardPage() {
               <div className="absolute bottom-[-90px] left-[30%] h-72 w-72 rounded-full bg-[#c9becf]/20 blur-3xl" />
 
               <div className="relative z-10 grid h-full items-center lg:grid-cols-[0.72fr_1.28fr]">
-                {/* Greeting */}
+                {/* GREETING */}
 
                 <div className="relative z-20 pb-4 lg:pb-0">
                   <p className="font-script text-4xl text-[#876d7e] sm:text-5xl">
@@ -195,27 +235,46 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* Existing 3D scene */}
+                {/* 3D SCENE */}
 
                 <div className="relative -my-8 min-h-[420px] lg:-my-2">
                   <HeroScene />
 
-                  <div className="pointer-events-none absolute right-[12%] top-[20%] hidden xl:block">
-                    <p className="font-script text-3xl leading-9 text-[#7e6977]">
-                      Small
-                      <br />
-                      Steps
-                      <br />
-                      Big
-                      <br />
-                      Changes
-                    </p>
+                  {/* INTERACTIVE QUOTE */}
+
+                  <div
+                    className="interactive-quote absolute right-[5%] top-[15%] z-20 hidden w-[155px] rounded-[28px] border border-white/80 bg-white/35 px-5 py-6 shadow-[0_25px_70px_rgba(74,53,66,0.12)] backdrop-blur-2xl xl:block"
+                    onPointerMove={handleQuotePointerMove}
+                    onPointerLeave={resetQuoteTilt}
+                    style={{
+                      transform: `perspective(900px) rotateX(${quoteTilt.x}deg) rotateY(${quoteTilt.y}deg) translateZ(0)`,
+                    }}
+                  >
+                    <div className="interactive-quote-glow pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-[#efc8bd]/30 blur-2xl" />
+
+                    <div className="interactive-quote-content relative z-10">
+                      <p className="font-script text-3xl leading-9 text-[#765d6e]">
+                        Small
+                        <br />
+                        Steps
+                        <br />
+                        Big
+                        <br />
+                        Changes
+                      </p>
+
+                      <div className="mt-4 h-px w-10 bg-[#a98f9e]/40" />
+
+                      <p className="mt-3 font-body text-[8px] uppercase tracking-[0.18em] text-[#927c89]">
+                        Move your cursor
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Feature cards */}
+            {/* FEATURE CARDS */}
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {features.map((feature) => (
@@ -251,7 +310,7 @@ export default function DashboardPage() {
               ))}
             </section>
 
-            {/* Daily thought */}
+            {/* DAILY THOUGHT */}
 
             <section className="dashboard-card relative min-h-[230px] rounded-[30px] px-6 py-7 sm:px-9 sm:py-8">
               <div className="pointer-events-none absolute right-8 top-4 text-5xl text-[#bd9aa5]/30">
@@ -283,7 +342,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* Recent Activity */}
+            {/* RECENT ACTIVITY */}
 
             <section className="dashboard-card rounded-[30px] px-6 py-7 sm:px-8">
               <div className="flex items-center justify-between">
@@ -345,10 +404,10 @@ export default function DashboardPage() {
             </section>
           </div>
 
-          {/* Right utility column */}
+          {/* ================= RIGHT COLUMN ================= */}
 
           <aside className="space-y-5">
-            {/* Calendar */}
+            {/* CALENDAR */}
 
             <section className="glass-soft rounded-[30px] p-6">
               <div className="flex items-center justify-between">
@@ -396,7 +455,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* Today */}
+            {/* TODAY */}
 
             <section className="glass-soft rounded-[30px] p-6">
               <div className="flex items-center justify-between">
@@ -437,7 +496,7 @@ export default function DashboardPage() {
               </Link>
             </section>
 
-            {/* Focus Mode visual */}
+            {/* FOCUS MODE */}
 
             <section className="overflow-hidden rounded-[30px] border border-white/75 bg-gradient-to-br from-[#665263] to-[#4a3542] p-5 text-white shadow-[0_25px_60px_rgba(74,53,66,0.18)]">
               <div className="flex items-center gap-4">
@@ -477,7 +536,7 @@ export default function DashboardPage() {
           </aside>
         </div>
 
-        {/* Footer */}
+        {/* FOOTER */}
 
         <footer className="py-7 text-center">
           <p className="font-body text-[9px] tracking-[0.4em] text-[#9b8492]">

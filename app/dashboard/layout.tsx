@@ -45,7 +45,7 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[#f7efef]">
-      {/* Desktop Sidebar */}
+      {/* ================= DESKTOP SIDEBAR ================= */}
 
       <aside className="dashboard-sidebar fixed left-0 top-0 z-50 hidden h-screen w-[245px] flex-col px-5 py-7 lg:flex">
         {/* Logo */}
@@ -107,7 +107,7 @@ export default function DashboardLayout({
           </Link>
         </nav>
 
-        {/* Bottom */}
+        {/* Sidebar bottom message */}
 
         <div className="mt-auto">
           <div className="mb-5 rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -119,6 +119,8 @@ export default function DashboardLayout({
               A little progress each day becomes something beautiful.
             </p>
           </div>
+
+          {/* Sidebar Logout */}
 
           <form action="/auth/signout" method="POST">
             <button
@@ -137,7 +139,7 @@ export default function DashboardLayout({
         </div>
       </aside>
 
-      {/* Mobile Top Navigation */}
+      {/* ================= MOBILE TOP BAR ================= */}
 
       <header className="dashboard-sidebar sticky top-0 z-50 flex items-center justify-between px-5 py-4 lg:hidden">
         <Link href="/dashboard">
@@ -150,15 +152,26 @@ export default function DashboardLayout({
           </div>
         </Link>
 
-        <Link
-          href="/dashboard/search"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-lg text-white"
-        >
-          ⌕
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/dashboard/search"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-lg text-white"
+          >
+            ⌕
+          </Link>
+
+          <form action="/auth/signout" method="POST">
+            <button
+              type="submit"
+              className="rounded-full bg-white/10 px-4 py-2 font-body text-[10px] tracking-wide text-white"
+            >
+              Log Out
+            </button>
+          </form>
+        </div>
       </header>
 
-      {/* Main Content */}
+      {/* ================= PAGE CONTENT ================= */}
 
       <div className="min-h-screen lg:ml-[245px]">
         {children}
