@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fcf8f7;
-  --surface: #d9d3d5;
-  --blue-light: #bfcbd3;
-  --blue-gray: #889fab;
-  --dark: #555e6a;
+  --background: #f7efef;
+  --surface: #eadfe2;
+  --surface-light: #fff9f7;
+
+  --mauve-dark: #4a3542;
+  --mauve: #73586a;
+  --mauve-light: #a98f9e;
+
+  --peach: #e9b7a9;
+  --peach-light: #f4d8cf;
+
+  --lavender: #c9becf;
+  --blue-light: #c5d0d5;
+  --blue-gray: #8898a2;
+
+  --text-dark: #403b45;
+  --text-soft: #766d78;
   --white: #ffffff;
 
   --font-heading: var(--font-playfair);
@@ -24,7 +36,7 @@ html {
 body {
   margin: 0;
   background: var(--background);
-  color: var(--dark);
+  color: var(--text-dark);
   font-family: var(--font-body);
   overflow-x: hidden;
 }
@@ -41,11 +53,9 @@ button {
 }
 
 ::selection {
-  background: var(--blue-gray);
-  color: var(--white);
+  background: var(--peach);
+  color: var(--mauve-dark);
 }
-
-/* Typography */
 
 .font-heading {
   font-family: var(--font-heading);
@@ -59,20 +69,248 @@ button {
   font-family: var(--font-script);
 }
 
-/* Main application background */
+/* --------------------------------------------------
+   GLOBAL ATMOSPHERE
+-------------------------------------------------- */
 
 .app-background {
   min-height: 100vh;
   background:
     radial-gradient(
-      circle at 20% 20%,
-      rgba(191, 203, 211, 0.35),
-      transparent 35%
+      circle at 15% 15%,
+      rgba(244, 216, 207, 0.95),
+      transparent 30%
     ),
     radial-gradient(
-      circle at 80% 70%,
-      rgba(136, 159, 171, 0.2),
+      circle at 80% 20%,
+      rgba(201, 190, 207, 0.55),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 70% 85%,
+      rgba(197, 208, 213, 0.6),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #faf5f3 0%,
+      #f5ecee 45%,
+      #eee7ed 100%
+    );
+}
+
+/* --------------------------------------------------
+   GLASS EFFECTS
+-------------------------------------------------- */
+
+.glass {
+  background: rgba(255, 250, 249, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 25px 70px rgba(74, 53, 66, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.glass-soft {
+  background: rgba(255, 250, 249, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.68);
+  box-shadow:
+    0 18px 55px rgba(74, 53, 66, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+/* --------------------------------------------------
+   SIDEBAR
+-------------------------------------------------- */
+
+.dashboard-sidebar {
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(233, 183, 169, 0.25),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(201, 190, 207, 0.18),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #624957 0%,
+      #4b3744 48%,
+      #392d38 100%
+    );
+
+  box-shadow:
+    15px 0 55px rgba(57, 45, 56, 0.14);
+}
+
+.sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-radius: 18px;
+  padding: 12px 15px;
+  color: rgba(255, 255, 255, 0.78);
+  transition:
+    background 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  transform: translateX(3px);
+}
+
+.sidebar-item-active {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.08)
+  );
+
+  color: white;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 12px 35px rgba(30, 20, 28, 0.12);
+}
+
+/* --------------------------------------------------
+   DASHBOARD HERO
+-------------------------------------------------- */
+
+.dashboard-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+
+  background:
+    radial-gradient(
+      circle at 72% 30%,
+      rgba(233, 183, 169, 0.34),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(201, 190, 207, 0.34),
       transparent 35%
     ),
-    var(--background);
+    linear-gradient(
+      120deg,
+      rgba(255, 250, 249, 0.72),
+      rgba(246, 229, 231, 0.52),
+      rgba(226, 221, 230, 0.5)
+    );
+
+  box-shadow:
+    0 30px 90px rgba(74, 53, 66, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+}
+
+/* --------------------------------------------------
+   FEATURE CARDS
+-------------------------------------------------- */
+
+.dashboard-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 252, 251, 0.76),
+      rgba(255, 247, 245, 0.48)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+
+  box-shadow:
+    0 22px 60px rgba(74, 53, 66, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  transition:
+    transform 300ms ease,
+    box-shadow 300ms ease,
+    background 300ms ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-7px);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 242, 239, 0.66)
+    );
+
+  box-shadow:
+    0 30px 80px rgba(74, 53, 66, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+/* --------------------------------------------------
+   SOFT ORBS / DECORATION
+-------------------------------------------------- */
+
+.decorative-orb {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(2px);
+}
+
+.floating-glow {
+  animation: floatingGlow 7s ease-in-out infinite;
+}
+
+@keyframes floatingGlow {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translateY(-14px) scale(1.04);
+    opacity: 0.8;
+  }
+}
+
+/* --------------------------------------------------
+   MOBILE
+-------------------------------------------------- */
+
+@media (max-width: 1023px) {
+  .dashboard-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-card {
+    border-radius: 22px;
+  }
+
+  .dashboard-hero {
+    border-radius: 24px;
+  }
 }

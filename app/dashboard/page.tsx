@@ -25,14 +25,14 @@ const features = [
     number: "03",
     title: "Reminders",
     description: "Keep track of the things you don't want to forget.",
-    icon: "♧",
+    icon: "◷",
     href: "/dashboard/reminders",
   },
   {
     number: "04",
     title: "My CV",
     description: "Build and update your personal CV from your information.",
-    icon: "▤",
+    icon: "▥",
     href: "/dashboard/cv",
   },
 ];
@@ -41,9 +41,11 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [userName, setUserName] = useState("there");
+
   const [dailyThought, setDailyThought] = useState(
     "You are becoming someone your future self will be proud to meet."
   );
+
   const [loading, setLoading] = useState(true);
   const [thoughtLoading, setThoughtLoading] = useState(true);
 
@@ -88,11 +90,11 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-[#FCF8F7]">
+      <main className="flex min-h-screen items-center justify-center bg-[#f7efef]">
         <div className="text-center">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-[#BFCBD3] border-t-[#555E6A]" />
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-[#d8c3cb] border-t-[#4a3542]" />
 
-          <p className="mt-4 font-body text-sm text-[#889FAB]">
+          <p className="mt-4 font-body text-sm text-[#8b7783]">
             Entering your universe...
           </p>
         </div>
@@ -101,207 +103,388 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#FCF8F7] text-[#555E6A]">
-      {/* Background atmosphere */}
+    <main className="app-background min-h-screen overflow-hidden px-4 py-5 sm:px-6 lg:px-8">
+      {/* Atmospheric background */}
+
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 -top-40 h-[550px] w-[550px] rounded-full bg-[#BFCBD3]/30 blur-[120px]" />
+        <div className="decorative-orb floating-glow left-[10%] top-[12%] h-40 w-40 bg-[#efc8bd]/25 blur-3xl" />
 
-        <div className="absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#889FAB]/15 blur-[130px]" />
+        <div
+          className="decorative-orb floating-glow right-[8%] top-[22%] h-64 w-64 bg-[#c9becf]/25 blur-3xl"
+          style={{ animationDelay: "1.5s" }}
+        />
 
-        <div className="absolute left-[40%] top-[30%] h-[300px] w-[300px] rounded-full bg-white/70 blur-[100px]" />
+        <div
+          className="decorative-orb floating-glow bottom-[10%] right-[30%] h-52 w-52 bg-[#c5d0d5]/25 blur-3xl"
+          style={{ animationDelay: "3s" }}
+        />
       </div>
 
-      {/* Navigation */}
-      <header className="relative z-20 border-b border-[#889FAB]/15 bg-[#FCF8F7]/70 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
-          {/* Logo */}
-          <Link href="/dashboard" className="group">
-            <h1 className="font-script text-3xl text-[#555E6A] transition group-hover:text-[#889FAB]">
-              Here I Am
-            </h1>
+      <div className="relative z-10 mx-auto max-w-[1500px]">
+        {/* Top bar */}
 
-            <p className="mt-0.5 font-body text-[9px] tracking-[0.35em] text-[#889FAB]">
+        <header className="mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
+          <div>
+            <p className="font-body text-[9px] tracking-[0.35em] text-[#8c7785]">
               YOUR PERSONAL UNIVERSE
             </p>
-          </Link>
 
-          {/* Navigation actions */}
+            <p className="font-heading text-xl text-[#4a3542]">
+              A little space for everything that matters.
+            </p>
+          </div>
+
           <div className="flex items-center gap-3">
             <Link
               href="/dashboard/search"
-              className="rounded-full border border-[#889FAB]/25 bg-white/50 px-4 py-2.5 font-body text-xs font-medium text-[#555E6A] shadow-sm backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white/80"
+              className="hidden rounded-full border border-white/80 bg-white/60 px-5 py-3 font-body text-xs font-medium text-[#554653] shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:block"
             >
-              <span className="mr-2">⌕</span>
-              Web Search
+              ⌕ &nbsp; Search anything
             </Link>
 
-            <form action="/auth/signout" method="POST">
-              <button
-                type="submit"
-                className="rounded-full border border-[#889FAB]/20 bg-[#555E6A] px-4 py-2.5 font-body text-xs font-medium text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#4b535f]"
-              >
-                Log Out
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="relative z-10 mx-auto max-w-7xl px-5 pb-8 pt-10 sm:px-8 sm:pt-14">
-        <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          {/* Hero text */}
-          <div className="relative z-10">
-            <p className="font-script text-3xl text-[#889FAB] sm:text-4xl">
-              Welcome,
-            </p>
-
-            <h2 className="font-heading mt-1 text-4xl font-semibold tracking-tight text-[#555E6A] sm:text-6xl">
-              {userName}
-            </h2>
-
-            <p className="mt-5 max-w-xl font-body text-sm leading-7 text-[#889FAB] sm:text-base">
-              Everything that matters to you, gathered into one personal
-              space — your memories, thoughts, plans, and stories.
-            </p>
-
-            <Link
-              href="/dashboard/memories"
-              className="mt-7 inline-flex items-center rounded-full border border-[#889FAB]/25 bg-white/55 px-5 py-3 font-body text-xs font-semibold text-[#555E6A] shadow-sm backdrop-blur-xl transition hover:-translate-y-1 hover:bg-white/80"
-            >
-              View memories
-              <span className="ml-3">→</span>
-            </Link>
-
-            {/* Small universe labels */}
-            <div className="mt-10 flex items-center gap-7">
-              <div>
-                <p className="font-body text-[10px] tracking-[0.3em] text-[#889FAB]">
-                  01
-                </p>
-                <p className="mt-1 font-heading text-sm text-[#555E6A]">
-                  Your thoughts
-                </p>
-              </div>
-
-              <div className="h-8 w-px bg-[#889FAB]/20" />
-
-              <div>
-                <p className="font-body text-[10px] tracking-[0.3em] text-[#889FAB]">
-                  02
-                </p>
-                <p className="mt-1 font-heading text-sm text-[#555E6A]">
-                  Your memories
-                </p>
-              </div>
-
-              <div className="h-8 w-px bg-[#889FAB]/20" />
-
-              <div>
-                <p className="font-body text-[10px] tracking-[0.3em] text-[#889FAB]">
-                  03
-                </p>
-                <p className="mt-1 font-heading text-sm text-[#555E6A]">
-                  Your journey
-                </p>
-              </div>
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
+              {userName.charAt(0).toUpperCase()}
             </div>
+
+            <span className="hidden font-body text-xs text-[#554653] md:block">
+              {userName}
+            </span>
           </div>
+        </header>
 
-          {/* Actual 3D universe */}
-          <div className="relative -mt-5 lg:-mt-10">
-            <HeroScene />
-          </div>
-        </div>
-      </section>
+        {/* Main dashboard grid */}
 
-      {/* Feature cards */}
-      <section className="relative z-10 mx-auto max-w-7xl px-5 pb-12 sm:px-8">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
-            <Link
-              key={feature.title}
-              href={feature.href}
-              className="group relative min-h-[285px] overflow-hidden rounded-[2rem] border border-white/90 bg-white/55 p-6 shadow-[0_20px_60px_rgba(85,94,106,0.08)] backdrop-blur-2xl transition duration-300 hover:-translate-y-2 hover:bg-white/75 hover:shadow-[0_28px_70px_rgba(85,94,106,0.14)]"
-            >
-              {/* Number */}
-              <span className="absolute right-6 top-6 font-body text-[10px] tracking-[0.25em] text-[#889FAB]/70">
-                {feature.number}
-              </span>
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
+          {/* Main column */}
 
-              {/* Icon */}
-              <div className="flex h-20 w-20 rotate-45 items-center justify-center rounded-[1.2rem] border border-[#889FAB]/20 bg-gradient-to-br from-[#D9D3D5]/60 to-[#BFCBD3]/30 shadow-[0_12px_35px_rgba(85,94,106,0.08)]">
-                <span className="-rotate-45 text-2xl text-[#555E6A]">
-                  {feature.icon}
+          <div className="min-w-0 space-y-5">
+            {/* Hero */}
+
+            <section className="dashboard-hero min-h-[500px] rounded-[34px] px-6 py-7 sm:px-10 sm:py-9">
+              <div className="absolute right-[-60px] top-[-80px] h-72 w-72 rounded-full bg-[#efc8bd]/20 blur-3xl" />
+
+              <div className="absolute bottom-[-90px] left-[30%] h-72 w-72 rounded-full bg-[#c9becf]/20 blur-3xl" />
+
+              <div className="relative z-10 grid h-full items-center lg:grid-cols-[0.72fr_1.28fr]">
+                {/* Greeting */}
+
+                <div className="relative z-20 pb-4 lg:pb-0">
+                  <p className="font-script text-4xl text-[#876d7e] sm:text-5xl">
+                    Good evening,
+                  </p>
+
+                  <h1 className="font-heading mt-1 text-5xl font-medium tracking-tight text-[#3e3440] sm:text-6xl xl:text-7xl">
+                    {userName}
+                    <span className="ml-2 text-[#b88788]">✦</span>
+                  </h1>
+
+                  <p className="mt-5 max-w-md font-body text-sm leading-7 text-[#786c76] sm:text-base">
+                    A little progress each day adds up to big results.
+                  </p>
+
+                  <div className="mt-7 max-w-md rounded-[22px] border border-white/75 bg-white/45 px-5 py-4 shadow-[0_18px_50px_rgba(74,53,66,0.07)] backdrop-blur-xl">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl text-[#bd8d8d]">
+                        ✦
+                      </span>
+
+                      <p className="font-heading text-base leading-6 text-[#51444f]">
+                        You are closer to your dreams than you think.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Existing 3D scene */}
+
+                <div className="relative -my-8 min-h-[420px] lg:-my-2">
+                  <HeroScene />
+
+                  <div className="pointer-events-none absolute right-[12%] top-[20%] hidden xl:block">
+                    <p className="font-script text-3xl leading-9 text-[#7e6977]">
+                      Small
+                      <br />
+                      Steps
+                      <br />
+                      Big
+                      <br />
+                      Changes
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Feature cards */}
+
+            <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              {features.map((feature) => (
+                <Link
+                  key={feature.title}
+                  href={feature.href}
+                  className="dashboard-card group min-h-[235px] p-5 sm:p-6"
+                >
+                  <span className="absolute right-5 top-5 font-body text-[9px] tracking-[0.25em] text-[#9a8793]">
+                    {feature.number}
+                  </span>
+
+                  <div className="flex h-16 w-16 rotate-45 items-center justify-center rounded-[17px] border border-white/80 bg-gradient-to-br from-[#eadcdf]/75 to-[#c9becf]/35 shadow-[0_12px_30px_rgba(74,53,66,0.08)]">
+                    <span className="-rotate-45 text-xl text-[#645564]">
+                      {feature.icon}
+                    </span>
+                  </div>
+
+                  <div className="mt-8">
+                    <h2 className="font-heading text-2xl text-[#4a3d48]">
+                      {feature.title}
+                    </h2>
+
+                    <p className="mt-2 font-body text-xs leading-5 text-[#877985]">
+                      {feature.description}
+                    </p>
+                  </div>
+
+                  <div className="absolute bottom-5 right-5 flex h-9 w-9 items-center justify-center rounded-full border border-[#bdaab5]/35 bg-white/45 text-[#625362] transition group-hover:translate-x-1 group-hover:bg-white/75">
+                    →
+                  </div>
+                </Link>
+              ))}
+            </section>
+
+            {/* Daily thought */}
+
+            <section className="dashboard-card relative min-h-[230px] rounded-[30px] px-6 py-7 sm:px-9 sm:py-8">
+              <div className="pointer-events-none absolute right-8 top-4 text-5xl text-[#bd9aa5]/30">
+                ✦
+              </div>
+
+              <div className="pointer-events-none absolute bottom-[-25px] left-[-15px] h-16 w-16 rotate-45 rounded-2xl border border-[#bd9aa5]/20" />
+
+              <p className="font-body text-[9px] font-medium tracking-[0.4em] text-[#9b7e8d]">
+                A THOUGHT FOR TODAY
+              </p>
+
+              <div className="mt-5 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+                <blockquote className="max-w-4xl border-l-2 border-[#bd9aa5]/25 pl-6 font-heading text-2xl leading-relaxed text-[#50434e] sm:text-3xl">
+                  {thoughtLoading ? (
+                    <span className="inline-flex items-center gap-2">
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-[#bd9aa5]" />
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-[#bd9aa5]" />
+                      <span className="h-2 w-2 animate-pulse rounded-full bg-[#bd9aa5]" />
+                    </span>
+                  ) : (
+                    `“${dailyThought}”`
+                  )}
+                </blockquote>
+
+                <p className="font-script text-2xl text-[#957b89]">
+                  You are enough
+                </p>
+              </div>
+            </section>
+
+            {/* Recent Activity */}
+
+            <section className="dashboard-card rounded-[30px] px-6 py-7 sm:px-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-body text-[9px] tracking-[0.35em] text-[#9b7e8d]">
+                    YOUR SPACE
+                  </p>
+
+                  <h2 className="font-heading mt-1 text-2xl text-[#4a3d48]">
+                    Recent Activity
+                  </h2>
+                </div>
+
+                <span className="font-body text-xs text-[#9a8793]">
+                  Your universe
                 </span>
               </div>
 
-              {/* Content */}
-              <div className="mt-8">
-                <h3 className="font-heading text-3xl text-[#555E6A]">
-                  {feature.title}
-                </h3>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <Link
+                  href="/dashboard/notes"
+                  className="rounded-2xl border border-white/75 bg-white/40 p-4 transition hover:bg-white/65"
+                >
+                  <p className="font-body text-[9px] tracking-[0.2em] text-[#9b7e8d]">
+                    NOTES
+                  </p>
 
-                <p className="mt-3 max-w-[250px] font-body text-sm leading-6 text-[#889FAB]">
-                  {feature.description}
-                </p>
+                  <p className="mt-2 font-heading text-lg text-[#51444f]">
+                    Capture your thoughts
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/memories"
+                  className="rounded-2xl border border-white/75 bg-white/40 p-4 transition hover:bg-white/65"
+                >
+                  <p className="font-body text-[9px] tracking-[0.2em] text-[#9b7e8d]">
+                    MEMORIES
+                  </p>
+
+                  <p className="mt-2 font-heading text-lg text-[#51444f]">
+                    Keep your moments
+                  </p>
+                </Link>
+
+                <Link
+                  href="/dashboard/reminders"
+                  className="rounded-2xl border border-white/75 bg-white/40 p-4 transition hover:bg-white/65"
+                >
+                  <p className="font-body text-[9px] tracking-[0.2em] text-[#9b7e8d]">
+                    REMINDERS
+                  </p>
+
+                  <p className="mt-2 font-heading text-lg text-[#51444f]">
+                    Stay on track
+                  </p>
+                </Link>
               </div>
-
-              {/* Arrow */}
-              <div className="absolute bottom-6 right-6 flex h-10 w-10 items-center justify-center rounded-full border border-[#889FAB]/25 bg-white/50 text-[#555E6A] transition group-hover:translate-x-1 group-hover:bg-white">
-                →
-              </div>
-
-              {/* Decorative crystal */}
-              <div className="pointer-events-none absolute -bottom-8 -left-8 h-20 w-20 rotate-45 rounded-2xl border border-[#889FAB]/10 bg-[#BFCBD3]/10 opacity-0 transition group-hover:opacity-100" />
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Daily Thought */}
-      <section className="relative z-10 mx-auto max-w-7xl px-5 pb-10 sm:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] border border-[#889FAB]/20 bg-white/55 px-7 py-10 shadow-[0_25px_70px_rgba(85,94,106,0.08)] backdrop-blur-2xl sm:px-12 sm:py-12">
-          {/* Decorative sparkle */}
-          <div className="pointer-events-none absolute right-10 top-[-8px] text-5xl text-[#889FAB]/25">
-            ✦
+            </section>
           </div>
 
-          {/* Decorative crystal */}
-          <div className="pointer-events-none absolute bottom-[-18px] left-[-8px] h-12 w-12 rotate-45 border-2 border-[#889FAB]/20" />
+          {/* Right utility column */}
 
-          <div className="relative z-10">
-            <p className="font-body text-[10px] font-medium tracking-[0.4em] text-[#889FAB]">
-              A THOUGHT FOR TODAY
-            </p>
+          <aside className="space-y-5">
+            {/* Calendar */}
 
-            <div className="mt-5 flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-              <blockquote className="max-w-4xl border-l-2 border-[#889FAB]/20 pl-7 font-heading text-2xl leading-relaxed text-[#555E6A] sm:text-3xl lg:text-4xl">
-                {thoughtLoading ? (
-                  <span className="inline-flex items-center gap-3 text-[#889FAB]">
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-[#889FAB]" />
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-[#889FAB] [animation-delay:150ms]" />
-                    <span className="h-2 w-2 animate-pulse rounded-full bg-[#889FAB] [animation-delay:300ms]" />
-                  </span>
-                ) : (
-                  `“${dailyThought}”`
+            <section className="glass-soft rounded-[30px] p-6">
+              <div className="flex items-center justify-between">
+                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663]">
+                  ‹
+                </button>
+
+                <h2 className="font-heading text-lg text-[#4d404a]">
+                  September 2026
+                </h2>
+
+                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663]">
+                  ›
+                </button>
+              </div>
+
+              <div className="mt-6 grid grid-cols-7 gap-y-4 text-center">
+                {["S", "M", "T", "W", "T", "F", "S"].map(
+                  (day, index) => (
+                    <span
+                      key={`${day}-${index}`}
+                      className="font-body text-[9px] text-[#a18d98]"
+                    >
+                      {day}
+                    </span>
+                  )
                 )}
-              </blockquote>
 
-              <p className="shrink-0 font-script text-2xl text-[#889FAB] sm:text-3xl">
-                — your space, your story
+                {Array.from({ length: 30 }, (_, index) => {
+                  const day = index + 1;
+
+                  return (
+                    <span
+                      key={day}
+                      className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full font-body text-[10px] ${
+                        day === 16
+                          ? "bg-[#e9b7a9] text-[#4a3542] shadow-sm"
+                          : "text-[#675966]"
+                      }`}
+                    >
+                      {day}
+                    </span>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* Today */}
+
+            <section className="glass-soft rounded-[30px] p-6">
+              <div className="flex items-center justify-between">
+                <h2 className="font-heading text-2xl text-[#4d404a]">
+                  Today
+                </h2>
+
+                <span className="font-body text-[10px] text-[#a18d98]">
+                  Your space
+                </span>
+              </div>
+
+              <div className="mt-5 space-y-3">
+                {[
+                  "Continue your project",
+                  "Review your notes",
+                  "Take a short break",
+                  "Work on your goals",
+                ].map((task) => (
+                  <div
+                    key={task}
+                    className="flex items-center gap-3 border-b border-[#a88f9d]/10 pb-3"
+                  >
+                    <span className="h-5 w-5 rounded-full border border-[#bdaab5]/55" />
+
+                    <span className="font-body text-xs text-[#685b66]">
+                      {task}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/dashboard/reminders"
+                className="mt-5 flex items-center justify-center rounded-full border border-white/80 bg-white/50 px-4 py-3 font-body text-xs text-[#625362] transition hover:bg-white/80"
+              >
+                + &nbsp; Add a reminder
+              </Link>
+            </section>
+
+            {/* Focus Mode visual */}
+
+            <section className="overflow-hidden rounded-[30px] border border-white/75 bg-gradient-to-br from-[#665263] to-[#4a3542] p-5 text-white shadow-[0_25px_60px_rgba(74,53,66,0.18)]">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#efc8bd] to-[#b99eb0] text-2xl text-[#4a3542]">
+                  ◐
+                </div>
+
+                <div>
+                  <p className="font-body text-[9px] tracking-[0.25em] text-white/45">
+                    FOCUS MODE
+                  </p>
+
+                  <h2 className="font-heading mt-1 text-xl">
+                    Your quiet space
+                  </h2>
+                </div>
+              </div>
+
+              <p className="mt-5 font-script text-3xl text-white/80">
+                Breathe. Focus. Create.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 px-5 pb-8 pt-2 text-center">
-        <p className="font-body text-[10px] tracking-[0.35em] text-[#889FAB]">
-          HERE I AM · YOUR SPACE, YOUR STORY
-        </p>
-      </footer>
+              <div className="mt-6 h-1 overflow-hidden rounded-full bg-white/10">
+                <div className="h-full w-[58%] rounded-full bg-[#e9b7a9]" />
+              </div>
+
+              <div className="mt-4 flex items-center justify-between text-white/45">
+                <span className="font-body text-[9px]">
+                  A moment for you
+                </span>
+
+                <span className="text-xl text-white">
+                  ▶
+                </span>
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        {/* Footer */}
+
+        <footer className="py-7 text-center">
+          <p className="font-body text-[9px] tracking-[0.4em] text-[#9b8492]">
+            HERE I AM · YOUR SPACE, YOUR STORY
+          </p>
+        </footer>
+      </div>
     </main>
   );
 }
