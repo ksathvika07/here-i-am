@@ -139,7 +139,7 @@ export default function AuthPage() {
     const { error } = await supabase.auth.verifyOtp({
       email,
       token: code,
-      type: "signup",
+      type: "email",
     });
 
     if (error) {
