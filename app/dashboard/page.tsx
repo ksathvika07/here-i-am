@@ -41,6 +41,7 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [userName, setUserName] = useState("there");
+  const [userEmail, setUserEmail] = useState("");
 
   const [dailyThought, setDailyThought] = useState(
     "You are becoming someone your future self will be proud to meet."
@@ -48,6 +49,7 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
   const [thoughtLoading, setThoughtLoading] = useState(true);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const [quoteTilt, setQuoteTilt] = useState({
     x: 0,
@@ -73,6 +75,7 @@ export default function DashboardPage() {
         "there";
 
       setUserName(name);
+      setUserEmail(user.email || "");
       setLoading(false);
 
       try {
@@ -150,9 +153,9 @@ export default function DashboardPage() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1500px]">
-        {/* ================= TOP BAR ================= */}
+        {/* Top bar */}
 
-        <header className="mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
+        <header className="relative z-50 mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
           <div>
             <p className="font-body text-[9px] tracking-[0.35em] text-[#8c7785]">
               YOUR PERSONAL UNIVERSE
@@ -163,7 +166,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="relative z-[100] flex items-center gap-3">
             <Link
               href="/dashboard/search"
               className="hidden rounded-full border border-white/80 bg-white/60 px-5 py-3 font-body text-xs font-medium text-[#554653] shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:block"
@@ -171,15 +174,71 @@ export default function DashboardPage() {
               ⌕ &nbsp; Search anything
             </Link>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
-              {userName.charAt(0).toUpperCase()}
+            {/* Profile menu */}
+
+            <div className="relative z-[100]">
+              <button
+                type="button"
+                onClick={() => setProfileOpen((current) => !current)}
+                className="relative z-[100] flex items-center gap-3 rounded-full transition hover:opacity-80"
+                aria-label="Open profile menu"
+                aria-expanded={profileOpen}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+
+                <span className="hidden font-body text-xs text-[#554653] md:block">
+                  {userName}
+                </span>
+              </button>
+
+              {profileOpen && (
+                <div className="pointer-events-auto absolute right-0 top-14 z-[999] w-64 overflow-hidden rounded-[24px] border border-white/80 bg-[#fffaf9]/95 p-2 shadow-[0_25px_70px_rgba(74,53,66,0.18)] backdrop-blur-2xl">
+                  <div className="border-b border-[#a88f9d]/10 px-4 py-3">
+                    <p className="font-heading text-base text-[#4a3542]">
+                      {userName}
+                    </p>
+
+                    <p className="mt-1 truncate font-body text-[10px] text-[#927f8a]">
+                      {userEmail}
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/dashboard/settings"
+                    onClick={() => setProfileOpen(false)}
+                    className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
+                  >
+                    <span className="text-base">⚙</span>
+                    <span>Settings</span>
+                  </Link>
+
+                  <Link
+                    href="/dashboard/settings"
+                    onClick={() => setProfileOpen(false)}
+                    className="flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
+                  >
+                    <span className="text-base">✦</span>
+                    <span>My Profile</span>
+                  </Link>
+
+                  <div className="my-1 border-t border-[#a88f9d]/10" />
+
+                  <form action="/auth/signout" method="POST">
+                    <button
+                      type="submit"
+                      className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left font-body text-xs text-[#8b4a4a] transition hover:bg-[#f7e9e8]"
+                    >
+                      <span className="text-base">↪</span>
+                      <span>Log Out</span>
+                    </button>
+                  </form>
+                </div>
+              )}
             </div>
 
-            <span className="hidden font-body text-xs text-[#554653] md:block">
-              {userName}
-            </span>
-
-            {/* TOP RIGHT LOGOUT — KEPT */}
+            {/* Logout */}
 
             <form action="/auth/signout" method="POST">
               <button
@@ -192,13 +251,11 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* ================= MAIN GRID ================= */}
-
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
-          {/* ================= MAIN COLUMN ================= */}
+          {/* Main column */}
 
           <div className="min-w-0 space-y-5">
-            {/* HERO */}
+            {/* Hero */}
 
             <section className="dashboard-hero min-h-[500px] rounded-[34px] px-6 py-7 sm:px-10 sm:py-9">
               <div className="absolute right-[-60px] top-[-80px] h-72 w-72 rounded-full bg-[#efc8bd]/20 blur-3xl" />
@@ -206,11 +263,11 @@ export default function DashboardPage() {
               <div className="absolute bottom-[-90px] left-[30%] h-72 w-72 rounded-full bg-[#c9becf]/20 blur-3xl" />
 
               <div className="relative z-10 grid h-full items-center lg:grid-cols-[0.72fr_1.28fr]">
-                {/* GREETING */}
+                {/* Greeting */}
 
                 <div className="relative z-20 pb-4 lg:pb-0">
                   <p className="font-script text-4xl text-[#876d7e] sm:text-5xl">
-                    Good Morning,
+                    Good evening,
                   </p>
 
                   <h1 className="font-heading mt-1 text-5xl font-medium tracking-tight text-[#3e3440] sm:text-6xl xl:text-7xl">
@@ -224,9 +281,7 @@ export default function DashboardPage() {
 
                   <div className="mt-7 max-w-md rounded-[22px] border border-white/75 bg-white/45 px-5 py-4 shadow-[0_18px_50px_rgba(74,53,66,0.07)] backdrop-blur-xl">
                     <div className="flex items-center gap-3">
-                      <span className="text-xl text-[#bd8d8d]">
-                        ✦
-                      </span>
+                      <span className="text-xl text-[#bd8d8d]">✦</span>
 
                       <p className="font-heading text-base leading-6 text-[#51444f]">
                         You are closer to your dreams than you think.
@@ -235,12 +290,12 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* 3D SCENE */}
+                {/* Existing 3D scene */}
 
                 <div className="relative -my-8 min-h-[420px] lg:-my-2">
                   <HeroScene />
 
-                  {/* INTERACTIVE QUOTE */}
+                  {/* Interactive floating quote */}
 
                   <div
                     className="interactive-quote absolute right-[5%] top-[15%] z-20 hidden w-[155px] rounded-[28px] border border-white/80 bg-white/35 px-5 py-6 shadow-[0_25px_70px_rgba(74,53,66,0.12)] backdrop-blur-2xl xl:block"
@@ -274,7 +329,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* FEATURE CARDS */}
+            {/* Feature cards */}
 
             <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {features.map((feature) => (
@@ -310,7 +365,7 @@ export default function DashboardPage() {
               ))}
             </section>
 
-            {/* DAILY THOUGHT */}
+            {/* Daily thought */}
 
             <section className="dashboard-card relative min-h-[230px] rounded-[30px] px-6 py-7 sm:px-9 sm:py-8">
               <div className="pointer-events-none absolute right-8 top-4 text-5xl text-[#bd9aa5]/30">
@@ -342,7 +397,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* RECENT ACTIVITY */}
+            {/* Recent Activity */}
 
             <section className="dashboard-card rounded-[30px] px-6 py-7 sm:px-8">
               <div className="flex items-center justify-between">
@@ -404,10 +459,10 @@ export default function DashboardPage() {
             </section>
           </div>
 
-          {/* ================= RIGHT COLUMN ================= */}
+          {/* Right utility column */}
 
           <aside className="space-y-5">
-            {/* CALENDAR */}
+            {/* Calendar */}
 
             <section className="glass-soft rounded-[30px] p-6">
               <div className="flex items-center justify-between">
@@ -455,7 +510,7 @@ export default function DashboardPage() {
               </div>
             </section>
 
-            {/* TODAY */}
+            {/* Today */}
 
             <section className="glass-soft rounded-[30px] p-6">
               <div className="flex items-center justify-between">
@@ -496,7 +551,7 @@ export default function DashboardPage() {
               </Link>
             </section>
 
-            {/* FOCUS MODE */}
+            {/* Focus Mode */}
 
             <section className="overflow-hidden rounded-[30px] border border-white/75 bg-gradient-to-br from-[#665263] to-[#4a3542] p-5 text-white shadow-[0_25px_60px_rgba(74,53,66,0.18)]">
               <div className="flex items-center gap-4">
@@ -528,15 +583,11 @@ export default function DashboardPage() {
                   A moment for you
                 </span>
 
-                <span className="text-xl text-white">
-                  ▶
-                </span>
+                <span className="text-xl text-white">▶</span>
               </div>
             </section>
           </aside>
         </div>
-
-        {/* FOOTER */}
 
         <footer className="py-7 text-center">
           <p className="font-body text-[9px] tracking-[0.4em] text-[#9b8492]">
