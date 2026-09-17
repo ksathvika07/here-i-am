@@ -41,6 +41,7 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [userName, setUserName] = useState("there");
+  const [userEmail, setUserEmail] = useState("");
 
   const [dailyThought, setDailyThought] = useState(
     "You are becoming someone your future self will be proud to meet."
@@ -48,6 +49,7 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
   const [thoughtLoading, setThoughtLoading] = useState(true);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   const [quoteTilt, setQuoteTilt] = useState({
     x: 0,
@@ -73,6 +75,7 @@ export default function DashboardPage() {
         "there";
 
       setUserName(name);
+      setUserEmail(user.email || "");
       setLoading(false);
 
       try {
@@ -171,13 +174,69 @@ export default function DashboardPage() {
               ⌕ &nbsp; Search anything
             </Link>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
-              {userName.charAt(0).toUpperCase()}
-            </div>
+            {/* Profile menu */}
 
-            <span className="hidden font-body text-xs text-[#554653] md:block">
-              {userName}
-            </span>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-3 rounded-full transition hover:opacity-80"
+                aria-label="Open profile menu"
+                aria-expanded={profileOpen}
+              >
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+
+                <span className="hidden font-body text-xs text-[#554653] md:block">
+                  {userName}
+                </span>
+              </button>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-14 z-50 w-64 overflow-hidden rounded-[24px] border border-white/80 bg-[#fffaf9]/95 p-2 shadow-[0_25px_70px_rgba(74,53,66,0.18)] backdrop-blur-2xl">
+                  <div className="border-b border-[#a88f9d]/10 px-4 py-3">
+                    <p className="font-heading text-base text-[#4a3542]">
+                      {userName}
+                    </p>
+
+                    <p className="mt-1 truncate font-body text-[10px] text-[#927f8a]">
+                      {userEmail}
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/dashboard/settings"
+                    onClick={() => setProfileOpen(false)}
+                    className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
+                  >
+                    <span className="text-base">⚙</span>
+                    <span>Settings</span>
+                  </Link>
+
+                  <Link
+                    href="/dashboard/settings"
+                    onClick={() => setProfileOpen(false)}
+                    className="flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
+                  >
+                    <span className="text-base">✦</span>
+                    <span>My Profile</span>
+                  </Link>
+
+                  <div className="my-1 border-t border-[#a88f9d]/10" />
+
+                  <form action="/auth/signout" method="POST">
+                    <button
+                      type="submit"
+                      className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left font-body text-xs text-[#8b4a4a] transition hover:bg-[#f7e9e8]"
+                    >
+                      <span className="text-base">↪</span>
+                      <span>Log Out</span>
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
 
             {/* Logout */}
 
@@ -222,9 +281,7 @@ export default function DashboardPage() {
 
                   <div className="mt-7 max-w-md rounded-[22px] border border-white/75 bg-white/45 px-5 py-4 shadow-[0_18px_50px_rgba(74,53,66,0.07)] backdrop-blur-xl">
                     <div className="flex items-center gap-3">
-                      <span className="text-xl text-[#bd8d8d]">
-                        ✦
-                      </span>
+                      <span className="text-xl text-[#bd8d8d]">✦</span>
 
                       <p className="font-heading text-base leading-6 text-[#51444f]">
                         You are closer to your dreams than you think.
@@ -526,9 +583,7 @@ export default function DashboardPage() {
                   A moment for you
                 </span>
 
-                <span className="text-xl text-white">
-                  ▶
-                </span>
+                <span className="text-xl text-white">▶</span>
               </div>
             </section>
           </aside>
