@@ -210,7 +210,7 @@ export default function DashboardPage() {
 
                 <div className="relative z-20 pb-4 lg:pb-0">
                   <p className="font-script text-4xl text-[#876d7e] sm:text-5xl">
-                    Good evening,
+                    Good Morning,
                   </p>
 
                   <h1 className="font-heading mt-1 text-5xl font-medium tracking-tight text-[#3e3440] sm:text-6xl xl:text-7xl">
