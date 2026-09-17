@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type PointerEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import HeroScene from "@/app/components/HeroScene";
@@ -74,6 +74,7 @@ export default function DashboardPage() {
     const now = new Date();
 
     setCurrentDate(now);
+
     setCalendarDate(
       new Date(now.getFullYear(), now.getMonth(), 1)
     );
@@ -91,9 +92,10 @@ export default function DashboardPage() {
       }
 
       const name =
-        user.user_metadata?.full_name ||
-        user.email?.split("@")[0] ||
-        "there";
+        typeof user.user_metadata?.full_name === "string" &&
+        user.user_metadata.full_name.trim()
+          ? user.user_metadata.full_name.trim()
+          : user.email?.split("@")[0] || "there";
 
       setUserName(name);
       setLoading(false);
@@ -117,7 +119,7 @@ export default function DashboardPage() {
   }, [router]);
 
   const handleQuotePointerMove = (
-    event: React.PointerEvent<HTMLDivElement>
+    event: PointerEvent<HTMLDivElement>
   ) => {
     const rect = event.currentTarget.getBoundingClientRect();
 
@@ -192,8 +194,14 @@ export default function DashboardPage() {
 
   const calendarCells = [
     ...Array.from({ length: firstDayOfMonth }, () => null),
-    ...Array.from({ length: daysInMonth }, (_, index) => index + 1),
+    ...Array.from(
+      { length: daysInMonth },
+      (_, index) => index + 1
+    ),
   ];
+
+  const avatarLetter =
+    userName.trim().charAt(0).toUpperCase() || "U";
 
   if (loading) {
     return (
@@ -242,6 +250,8 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Web Search */}
+
             <Link
               href="/dashboard/search"
               className="hidden rounded-full border border-white/80 bg-white/60 px-5 py-3 font-body text-xs font-medium text-[#554653] shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:block"
@@ -249,13 +259,32 @@ export default function DashboardPage() {
               ⌕ &nbsp; Search anything
             </Link>
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
-              {userName.charAt(0).toUpperCase()}
-            </div>
+            {/* Clickable Profile */}
 
-            <span className="hidden font-body text-xs text-[#554653] md:block">
-              {userName}
-            </span>
+            <Link
+              href="/dashboard/profile"
+              aria-label="Open profile settings"
+              className="group flex items-center gap-3 rounded-full transition hover:-translate-y-0.5"
+            >
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm transition group-hover:bg-[#cdbbc5] group-hover:shadow-md">
+                {avatarLetter}
+              </div>
+
+              <span className="hidden font-body text-xs text-[#554653] transition group-hover:text-[#4a3542] md:block">
+                {userName}
+              </span>
+            </Link>
+
+            {/* Log Out */}
+
+            <form action="/auth/signout" method="POST">
+              <button
+                type="submit"
+                className="rounded-full bg-[#4a3542] px-5 py-3 font-body text-xs font-medium text-white shadow-[0_10px_25px_rgba(74,53,66,0.18)] transition hover:-translate-y-0.5 hover:bg-[#624957]"
+              >
+                Log Out
+              </button>
+            </form>
           </div>
         </header>
 
