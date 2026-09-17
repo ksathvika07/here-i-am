@@ -37,11 +37,22 @@ const features = [
   },
 ];
 
+function getGreeting(hour: number) {
+  if (hour >= 5 && hour < 12) {
+    return "Good morning,";
+  }
+
+  if (hour >= 12 && hour < 17) {
+    return "Good afternoon,";
+  }
+
+  return "Good evening,";
+}
+
 export default function DashboardPage() {
   const router = useRouter();
 
   const [userName, setUserName] = useState("there");
-  const [userEmail, setUserEmail] = useState("");
 
   const [dailyThought, setDailyThought] = useState(
     "You are becoming someone your future self will be proud to meet."
@@ -49,14 +60,24 @@ export default function DashboardPage() {
 
   const [loading, setLoading] = useState(true);
   const [thoughtLoading, setThoughtLoading] = useState(true);
-  const [profileOpen, setProfileOpen] = useState(false);
 
   const [quoteTilt, setQuoteTilt] = useState({
     x: 0,
     y: 0,
   });
 
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
+
+  const [calendarDate, setCalendarDate] = useState<Date | null>(null);
+
   useEffect(() => {
+    const now = new Date();
+
+    setCurrentDate(now);
+    setCalendarDate(
+      new Date(now.getFullYear(), now.getMonth(), 1)
+    );
+
     const loadDashboard = async () => {
       const supabase = createClient();
 
@@ -75,7 +96,6 @@ export default function DashboardPage() {
         "there";
 
       setUserName(name);
-      setUserEmail(user.email || "");
       setLoading(false);
 
       try {
@@ -120,6 +140,61 @@ export default function DashboardPage() {
     });
   };
 
+  function goToPreviousMonth() {
+    setCalendarDate((previous) => {
+      if (!previous) return previous;
+
+      return new Date(
+        previous.getFullYear(),
+        previous.getMonth() - 1,
+        1
+      );
+    });
+  }
+
+  function goToNextMonth() {
+    setCalendarDate((previous) => {
+      if (!previous) return previous;
+
+      return new Date(
+        previous.getFullYear(),
+        previous.getMonth() + 1,
+        1
+      );
+    });
+  }
+
+  const monthName = calendarDate
+    ? calendarDate.toLocaleString("default", {
+        month: "long",
+      })
+    : "";
+
+  const calendarYear = calendarDate
+    ? calendarDate.getFullYear()
+    : "";
+
+  const daysInMonth = calendarDate
+    ? new Date(
+        calendarDate.getFullYear(),
+        calendarDate.getMonth() + 1,
+        0
+      ).getDate()
+    : 0;
+
+  const firstDayOfMonth = calendarDate
+    ? new Date(
+        calendarDate.getFullYear(),
+        calendarDate.getMonth(),
+        1
+      ).getDay()
+    : 0;
+
+  const calendarCells = [
+    ...Array.from({ length: firstDayOfMonth }, () => null),
+    ...Array.from({ length: daysInMonth }, (_, index) => index + 1),
+  ];
+
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#f7efef]">
@@ -155,7 +230,7 @@ export default function DashboardPage() {
       <div className="relative z-10 mx-auto max-w-[1500px]">
         {/* Top bar */}
 
-        <header className="relative z-50 mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
+        <header className="mb-5 flex items-center justify-between rounded-[24px] border border-white/70 bg-white/35 px-5 py-3 shadow-[0_15px_45px_rgba(74,53,66,0.06)] backdrop-blur-xl sm:px-7">
           <div>
             <p className="font-body text-[9px] tracking-[0.35em] text-[#8c7785]">
               YOUR PERSONAL UNIVERSE
@@ -166,7 +241,7 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="relative z-[100] flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <Link
               href="/dashboard/search"
               className="hidden rounded-full border border-white/80 bg-white/60 px-5 py-3 font-body text-xs font-medium text-[#554653] shadow-sm transition hover:-translate-y-0.5 hover:bg-white sm:block"
@@ -174,80 +249,13 @@ export default function DashboardPage() {
               ⌕ &nbsp; Search anything
             </Link>
 
-            {/* Profile menu */}
-
-            <div className="relative z-[100]">
-              <button
-                type="button"
-                onClick={() => setProfileOpen((current) => !current)}
-                className="relative z-[100] flex items-center gap-3 rounded-full transition hover:opacity-80"
-                aria-label="Open profile menu"
-                aria-expanded={profileOpen}
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-
-                <span className="hidden font-body text-xs text-[#554653] md:block">
-                  {userName}
-                </span>
-              </button>
-
-              {profileOpen && (
-                <div className="pointer-events-auto absolute right-0 top-14 z-[999] w-64 overflow-hidden rounded-[24px] border border-white/80 bg-[#fffaf9]/95 p-2 shadow-[0_25px_70px_rgba(74,53,66,0.18)] backdrop-blur-2xl">
-                  <div className="border-b border-[#a88f9d]/10 px-4 py-3">
-                    <p className="font-heading text-base text-[#4a3542]">
-                      {userName}
-                    </p>
-
-                    <p className="mt-1 truncate font-body text-[10px] text-[#927f8a]">
-                      {userEmail}
-                    </p>
-                  </div>
-
-                  <Link
-                    href="/dashboard/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="mt-1 flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
-                  >
-                    <span className="text-base">⚙</span>
-                    <span>Settings</span>
-                  </Link>
-
-                  <Link
-                    href="/dashboard/settings"
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 rounded-2xl px-4 py-3 font-body text-xs text-[#554653] transition hover:bg-[#f4e8e7]"
-                  >
-                    <span className="text-base">✦</span>
-                    <span>My Profile</span>
-                  </Link>
-
-                  <div className="my-1 border-t border-[#a88f9d]/10" />
-
-                  <form action="/auth/signout" method="POST">
-                    <button
-                      type="submit"
-                      className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left font-body text-xs text-[#8b4a4a] transition hover:bg-[#f7e9e8]"
-                    >
-                      <span className="text-base">↪</span>
-                      <span>Log Out</span>
-                    </button>
-                  </form>
-                </div>
-              )}
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-white/80 bg-[#d7c8d0] font-heading text-sm text-[#4a3542] shadow-sm">
+              {userName.charAt(0).toUpperCase()}
             </div>
 
-            {/* Logout */}
-
-            <form action="/auth/signout" method="POST">
-              <button
-                type="submit"
-                className="rounded-full bg-[#4a3542] px-5 py-3 font-body text-xs font-medium text-white shadow-[0_10px_25px_rgba(74,53,66,0.18)] transition hover:-translate-y-0.5 hover:bg-[#624957]"
-              >
-                Log Out
-              </button>
-            </form>
+            <span className="hidden font-body text-xs text-[#554653] md:block">
+              {userName}
+            </span>
           </div>
         </header>
 
@@ -267,7 +275,9 @@ export default function DashboardPage() {
 
                 <div className="relative z-20 pb-4 lg:pb-0">
                   <p className="font-script text-4xl text-[#876d7e] sm:text-5xl">
-                    Good Morning,
+                    {currentDate
+                      ? getGreeting(currentDate.getHours())
+                      : "Welcome,"}
                   </p>
 
                   <h1 className="font-heading mt-1 text-5xl font-medium tracking-tight text-[#3e3440] sm:text-6xl xl:text-7xl">
@@ -281,7 +291,9 @@ export default function DashboardPage() {
 
                   <div className="mt-7 max-w-md rounded-[22px] border border-white/75 bg-white/45 px-5 py-4 shadow-[0_18px_50px_rgba(74,53,66,0.07)] backdrop-blur-xl">
                     <div className="flex items-center gap-3">
-                      <span className="text-xl text-[#bd8d8d]">✦</span>
+                      <span className="text-xl text-[#bd8d8d]">
+                        ✦
+                      </span>
 
                       <p className="font-heading text-base leading-6 text-[#51444f]">
                         You are closer to your dreams than you think.
@@ -466,15 +478,25 @@ export default function DashboardPage() {
 
             <section className="glass-soft rounded-[30px] p-6">
               <div className="flex items-center justify-between">
-                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663]">
+                <button
+                  type="button"
+                  onClick={goToPreviousMonth}
+                  aria-label="Previous month"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663] transition hover:bg-white/70"
+                >
                   ‹
                 </button>
 
                 <h2 className="font-heading text-lg text-[#4d404a]">
-                  September 2026
+                  {monthName} {calendarYear}
                 </h2>
 
-                <button className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663]">
+                <button
+                  type="button"
+                  onClick={goToNextMonth}
+                  aria-label="Next month"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/45 text-[#675663] transition hover:bg-white/70"
+                >
                   ›
                 </button>
               </div>
@@ -491,16 +513,26 @@ export default function DashboardPage() {
                   )
                 )}
 
-                {Array.from({ length: 30 }, (_, index) => {
-                  const day = index + 1;
+                {calendarCells.map((day, index) => {
+                  const isToday =
+                    day !== null &&
+                    currentDate !== null &&
+                    calendarDate !== null &&
+                    day === currentDate.getDate() &&
+                    calendarDate.getMonth() ===
+                      currentDate.getMonth() &&
+                    calendarDate.getFullYear() ===
+                      currentDate.getFullYear();
 
                   return (
                     <span
-                      key={day}
+                      key={`${calendarDate?.getFullYear()}-${calendarDate?.getMonth()}-${index}`}
                       className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full font-body text-[10px] ${
-                        day === 16
+                        isToday
                           ? "bg-[#e9b7a9] text-[#4a3542] shadow-sm"
-                          : "text-[#675966]"
+                          : day === null
+                            ? ""
+                            : "text-[#675966]"
                       }`}
                     >
                       {day}
@@ -583,7 +615,9 @@ export default function DashboardPage() {
                   A moment for you
                 </span>
 
-                <span className="text-xl text-white">▶</span>
+                <span className="text-xl text-white">
+                  ▶
+                </span>
               </div>
             </section>
           </aside>
